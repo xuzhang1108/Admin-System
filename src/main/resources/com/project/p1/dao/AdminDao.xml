@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.project.p1.dao.AdminDao">
+
+    <select id="login" parameterType="com.project.p1.bean.pojo.Admin" resultType="int">
+        select count(*) from t_admin where username = #{username} and password = #{password}
+    </select>
+
+    <select id="allAdmins" parameterType="com.project.p1.bean.pojo.Admin" resultType="com.project.p1.bean.pojo.Admin">
+        select id, username, nickname, password from t_admin
+        <where>
+            <if test="username != null and username != ''">
+                username like concat("%", #{username}, "%")
+            </if>
+            <if test="nickname != null and nickname != ''">
+                and nickname like concat("%", #{nickname}, "%")
+            </if>
+        </where>
+    </select>
+
+    <select id="getAdmin" parameterType="java.lang.Integer" resultType="com.project.p1.bean.pojo.Admin">
+        select id, username, nickname, password from t_admin where id = #{id}
+    </select>
+
+    <insert id="addAdmin" parameterType="com.project.p1.bean.pojo.Admin">
+        insert into t_admin values (#{id}, #{username}, #{nickname}, #{password})
+    </insert>
+
+    <delete id="deleteAdmin" parameterType="int">
+        delete from t_admin where id = #{id}
+    </delete>
+
+    <update id="updateAdmin" parameterType="com.project.p1.bean.pojo.Admin">
+        update t_admin set username = #{username}, nickname = #{nickname}, password = #{password} where id = #{id}
+    </update>
+</mapper>

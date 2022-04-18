@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.project.p1.dao.UserDao">
+
+    <select id="allUsers" resultType="com.project.p1.bean.pojo.User">
+        select id, email, nickname, recipient, address, phone from t_user
+    </select>
+
+    <select id="searchUser" parameterType="String" resultType="com.project.p1.bean.pojo.User">
+        select id, email, nickname, recipient, address, phone from t_user
+        <where>
+            <if test="nickname != null and nickname != ''">
+                nickname like concat("%", #{nickname}, "%")
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteUser" parameterType="int">
+        delete from t_user where id = #{id}
+    </delete>
+
+</mapper>

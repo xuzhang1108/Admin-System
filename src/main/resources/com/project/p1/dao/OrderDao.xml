@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.project.p1.dao.OrderDao">
+    <select id="getTotalCount" parameterType="com.project.p1.bean.bo.OrderByPageBO" resultType="int">
+        select count(*) from t_order
+        <where>
+            <if test="address != null and address != ''">
+                address like concat("%", #{address}, "%")
+            </if>
+            <if test="moneyLimit1 != null and moneyLimit1 != ''">
+                and amount &lt;= #{moneyLimit1}
+            </if>
+            <if test="moneyLimit2 != null and moneyLimit2 != ''">
+                and amount &gt;= #{moneyLimit2}
+            </if>
+            <if test="name != null and name != ''">
+                and receiver like concat("%", #{name}, "%")
+            </if>
+            <if test="goods != null and goods != ''">
+                and goodsName like concat("%", #{goods}, "%")
+            </if>
+            <if test="id != null and id != ''">
+                and id = #{id}
+            </if>
+            <if test="state != -1">
+                and stateId = #{state}
+            </if>
+        </where>
+    </select>
+    
+    <select id="ordersByPage" parameterType="com.project.p1.bean.bo.OrderByPageBO" resultType="com.project.p1.bean.vo.OrderInOrdersByPageVO">
+        select id,
+               userId,
+               specId    as goodsDetailId,
+               goodsName as goods,
+               specName  as spec,
+               number    as goodsNum,
+               amount,
+               stateId,
+               nickname,
+               receiver  as name,
+               address,
+               telephone as phone
+        from t_order
+        <where>
+            <if test="address != null and address != ''">
+                address like concat("%", #{address}, "%")
+            </if>
+            <if test="moneyLimit1 != null and moneyLimit1 != ''">
+                and amount &lt;= #{moneyLimit1}
+            </if>
+            <if test="moneyLimit2 != null and moneyLimit2 != ''">
+                and amount &gt;= #{moneyLimit2}
+            </if>
+            <if test="name != null and name != ''">
+                and receiver like concat("%", #{name}, "%")
+            </if>
+            <if test="goods != null and goods != ''">
+                and goodsName like concat("%", #{goods}, "%")
+            </if>
+            <if test="id != null and id != ''">
+                and id = #{id}
+            </if>
+            <if test="state != -1">
+                and stateId = #{state}
+            </if>
+        </where>
+        limit #{pagesize} offset ${(currentPage - 1) * pagesize}
+    </select>
+
+    <select id="getBasicInfo" parameterType="int" resultType="com.project.p1.bean.vo.OrderBasicInfoVO">
+        select goodsName as goods, amount, number as num, specId, stateId from t_order where id = #{id}
+    </select>
+
+    <select id="getSpecList" parameterType="int" resultType="com.project.p1.bean.vo.SpecInOrderEditVO">
+        select id, name as specName from t_specification where id = #{specId}
+    </select>
+
+    <select id="getStateList" resultType="com.project.p1.bean.vo.StateInOrderEditVO">
+        select id, stateName as name from t_state
+    </select>
+
+    <update id="changeOrder" parameterType="com.project.p1.bean.bo.OrderEditBO">
+        update t_order set number = #{num}, specId = #{spec}, stateId = #{state} where id = #{id}
+    </update>
+
+    <delete id="deleteOrder" parameterType="int">
+        delete from t_order where id = #{id}
+    </delete>
+</mapper>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.project.p1.dao.GoodsDao">
+
+    <select id="getType" resultType="com.project.p1.bean.Type">
+        select id, name from t_type
+    </select>
+
+    <select id="getGoodsByType" parameterType="int" resultType="com.project.p1.bean.vo.GoodsByTypeVO">
+        select id, image as img, name, price, typeId, stockNum from t_goods where typeId = #{typeId}
+    </select>
+
+    <insert id="addGoods" useGeneratedKeys="true" keyProperty="id" parameterType="com.project.p1.bean.Goods">
+        insert into t_goods values (null, #{name}, #{typeId}, #{image}, #{stockNum}, #{price}, #{description})
+    </insert>
+
+    <insert id="addSpecs" parameterType="com.project.p1.bean.Specification">
+        insert into t_specification values
+        <foreach collection="list" separator="," item="sp">
+            (null, #{sp.name},#{sp.stockNum},#{sp.price},#{sp.goodsId})
+        </foreach>
+    </insert>
+
+    <insert id="addType" parameterType="com.project.p1.bean.Type">
+        insert into t_type values (#{id}, #{name})
+    </insert>
+
+    <delete id="deleteType" parameterType="int">
+        delete from t_type where id = #{typeId}
+    </delete>
+
+    <select id="getGoodsInfo" parameterType="int" resultType="com.project.p1.bean.Goods">
+        select id, name, typeId, image, stockNum, price, description from t_goods where id = #{id}
+    </select>
+
+    <select id="getSpecList" parameterType="int" resultType="com.project.p1.bean.Specification">
+        select id, name, stockNum, price, goodsId from t_specification where goodsId = #{id}
+    </select>
+
+    <delete id="deleteGoods" parameterType="int">
+        delete from t_goods where id = #{id};
+    </delete>
+
+    <delete id="deleteSpec" parameterType="int">
+        delete from t_specification where goodsId = #{id};
+    </delete>
+</mapper>
