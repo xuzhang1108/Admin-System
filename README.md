@@ -19,8 +19,8 @@
 
 - AdminDao:  获取与管理员相关的信息数据。
 - UserDao: 获取与用户相关的信息数据。
-- GoodsDaoe: 获取商品的相关数据。
-- OrderDaoe: 获取订单的相关信息数据。
+- GoodsDao: 获取商品的相关数据。
+- OrderDao: 获取订单的相关信息数据。
 
 **bean目录：**
 
